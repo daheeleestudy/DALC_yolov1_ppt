@@ -194,3 +194,19 @@ YOLO와 Fast R-CNN, 두 모델 간 오류를 살펴야 함(Fast R-CNN 은 가장
 - ZF (Zeiler-Fergus) 은 YOLO보다 2.5배나 더 느리지만 (VGG-16보다 빠름) 정확도에서 적합하지 않음
 
 # 4-2 VOC 2007 Error Analysis
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/d3b305c2-62d3-421c-8486-17b6665c5f6b)
+
+1. YOLO vs. Fast R-CNN (Fast R-CNN 모델은 PASCAL 데이터셋 상에서 가낭 높은 탐지 성능을 보이는 모델 중 하나이며, 공공에서 널리 쓰이는 모델이기 때문)
+2. 위 그림은, 20개의 카테고리에 대하여 각 error type(background, Localization etc) 들을 종합하여 평균을 낸 도표임. (파스칼 데이터셋에 대한 간략 설명 필수)
+3. YOLO 와 Fast R-CNN 의 비교
+- YOLO :
+
+| Breakdown in Localization  | Struggles to localize correctly 
+오류율 높음 | 나머지 에러 합친 값보다 Localization에서 더 큰 breakdown |
+| --- | --- | --- |
+| Breakdown in Background | 오류율 낮음 |  |
+|  |  |  |
+- Fast R-CNN
+- Breakdown in Localization: YOLO 보다 낮은 오류율
+- Breakdown in Background: 오류율 높음, 13.6% 비율로 error 를 나타내며, 특정 개체가 아니라 배경(background)를 감지함. [거짓 양성; 잘 탐지하지만, 거짓된 정보, 특정 개체가 아닌 background라는 의미]  YOLO보다 배경을 3배는 더 감지 한다.
+
