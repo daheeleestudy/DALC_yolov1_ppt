@@ -1,3 +1,5 @@
+# 동덕여대 인공지능 동아리 DALC Yolo v1 paper review
+
 # . Introduction
 
 이미지 탐지 분류 시스템 object detection의 하나
@@ -7,7 +9,8 @@ localization(bounding box 선정) & classification(이미지 분류)를 한번�
 
 원본 이미지를 그리드화 시켜 그리드 중심으로 미리 정의 된 형태로 지정된 경계박스 갯수 기반 신뢰도 계산, 이미지에 객체가 포함되어 있는지, 배경만 단독으로 있는지에 대한 여부 포함, 높은 객체 신뢰도를 가진 위치를 선택해 객체 카테고리 파악한다. 단일CNN과 다르게 전체적으로 이미지를 학습
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e2536b5c-84e6-4865-8d01-35716fbac3e8/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/a141191d-faf2-48ac-9f40-77ae54935e04)
+
 
 대표적인 object detection 방식인 R-CNN은 많은 객체를 탐지하는데 한계가 있음.
 
@@ -28,7 +31,8 @@ YOLO 장점
 
 # 2. Unified Detection
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27dae789-a845-4a20-93cc-317e4b4a2e67/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/5f3dc136-0331-4843-a186-4d95b16bd026)
+
 
 7*7 그리드 2개의 bounding box를 예측 = 총 98개 바운딩 박스
 
@@ -36,13 +40,15 @@ YOLO 장점
 
 Confidence score 식
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/06253099-79a0-4be7-80dc-471f1db0e7e2/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/4215cdc3-601e-40b4-9e13-757093edd5e4)
+
 
 각 그리드셀- c개의 conditional class probability
 
 **conditional class probability =  Pr(Classi | Object)**  물체가 bbbox에 있을때 그리드셀에 있는 object가 클래스에 속할 확률
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c88ba58b-6695-48d0-83cc-48c00c85ff0e/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/231a7943-c2b2-4b2a-8b7a-01cbfa4b2327)
+
 
 output= 바운딩 박스의 중심좌표인 x,y
 
@@ -52,7 +58,8 @@ output= 바운딩 박스의 중심좌표인 x,y
 
 Class Specific Confidence Score
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2b1c3234-6cfd-4db9-8754-45d9e4323294/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/3cf17074-7ba5-42c6-bad5-6d21c641370d)
+
 
 ## **2.1 Network Design**
 
@@ -67,7 +74,8 @@ Fast  Yolo (Yolo를 경량화하여 속도 높임)
 
 ## 2.2 Training
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/63f739ba-6408-4e01-8b2b-abdc7c492ef7/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/9da1379f-716c-43e1-af59-3af1debcc9d3)
+
 
 특정 object에 대해 ground truth 중심이 위치하는 셀이 해당
 학습할때는 bounding box 한개만 사용- IOU가 가장높은(ground truth와 가장많이 겹치는) 박스 한개
@@ -95,23 +103,29 @@ Fast  Yolo (Yolo를 경량화하여 속도 높임)
 
 나머지 20 - 20 class conditional class probability
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/323d9b6a-969c-4660-9a70-6773b3c8262c/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/cb054d9e-0502-4c1a-b274-204aceb93d2c)
+
+
 
 첫번째 output에서 예측된 bounding box  confidence score와 conditional class probability를 곱하면 = class confidence score가 나옴 
 
 두번째 bounding box도 위와 같이 구함 
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5c073e85-c8ed-4584-801a-f76a1cac2862/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/92340734-9adf-441e-ab22-ff30b43afbdb)
+
+
 
 98개 class specific confidence score 얻을 수 있음 
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5e3707f4-8863-4475-ac33-05be7ad32442/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/477a6d33-0b96-4fe5-81c2-0a757d732a52)
+
 
 1440개 값 중 0.2 (threshold)보다 작은 값 - 모두 0으로 변환
 
 그후 클래스별 내림차순 정렬 → Non - max supression 기법 통해서 최종 output 만들어냄
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/940c9793-97d2-4028-a71f-90241b212614/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/be41ed66-d015-4672-b462-8c67906b8caf)
+
 
 모든 클래스에 대해 NMS 적용하면 대부분의 값이 0으로 치환
 
