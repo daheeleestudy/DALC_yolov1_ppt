@@ -152,8 +152,45 @@ DPM (Deformable parts models)
 
 슬라이딩 윈도우 방식(sliding window) 사용 - 일정 간격의 bbx 건너 뛰고 bbx 그려줌
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2e01fa79-e7a7-465e-87ed-30d56709b166/Untitled.png)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/bdda8470-f9f7-47b3-ac3b-eea1887bbb4f)
+
 
 서로 분리된 파이프라인 - 특징 추출, 위치 파악, bbx 예측 수행 (yolo는 이 과정을 하나의 convolution 신경망으로 한번에 처리) 
 
 DPM 관련 자료
+https://89douner.tistory.com/82
+
+# 3-2 
+### OverFeat.
+
+1. Source: Integrated Recognition, Localization, Detection; 지역화(Localization)를 하고, 탐지를 위해 Localizer를 적용하는 것
+2. Sliding Window Algorithm사용: 일정한 범위의 Window, box를 original image 에 슬라이드. 이로써 추출한 aspect ratio(형상비율)-사이즈, 각도, 모양-을 CNN에 넣어 분류를 수행함→ Window를 bounding box 와 동일한 역할임
+3. Overfeat. 은 Detection performance 보다 Localization(지역화) performance에 최적화된 알고리즘.
+4. DPM 과 마찬가지로, Localizer는 Local 정보만 보기 때문에, 전반적인 context 를 설명하기는 어려움. 
+
+### MultiGrasp.
+
+1. 매우 간단한 알고리즘
+2. 사이즈, 위치, 객체의 바운더리를 측정할 필요가 없음 (grasping 하기에 “적절한” 지역을 찾을 뿐)
+3. YOLO 역시, 이미지 당 다중 class의 다중 객체들을 탐지하기 위하여 bounding box 와 class확률을 예측한다.
+
+# 4. Experiments
+
+YOLO vs. Other real time detection systems [PASCAL VOC. 2007]
+
+YOLO와 Fast R-CNN, 두 모델 간 오류를 살펴야 함(Fast R-CNN 은 가장 높은 성능을 보이는  R-CNN 버전 중 하나) So, YOLO와 R-CNN 포함 다른 버전들 간 차이를 알 수 있음.
+
+# 4-1 Comparison to Other Real-Time System
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/3cee8eef-1dd4-4e1b-a8fd-bc8eca3c5d03)
+
+
+1. Fast YOLO 가 PASCAL 에서 제일 빠른 객체 탐지를 수행함. 
+- 52.7%의 mAP 를 기록하면서, 앞 DPM 보다, 높은 정확률을 보임.
+1. YOLO는 63.4% 의 mAP를 보여줌과 둥시에, 실시간 객체 탐지를 수행함
+2. YOLO 모델을 VGG-16을 적용하여 훈련시키기도 하나, YOLO보다 속도 측면에서 현저히 낮은 기록 보유 
+3. Fast R-CNN : R-CNN 에서 ‘분류’ 단계의 처리 속도를 줄일 수 있다. 그러나, bounding box를 생성하기 위해 selective search (한 이미지당 2초) 에 의존함—>문제점이 될 수 있음. mAP측면에서는 높은 성능을 보이나, 속도 측면에서는 성능이 현저하게 떨어져 (fps=0.5) 실시간 객체 탐지에 사용하기 적합하지 않음
+4. Faster R-CNN : 바운딩 박스를 생성하기 위해 selective search 알고리즘 대신 신경망 (neural network)를 사용함. 두 가지 버전 중, 제일 높은 정확률을 보이는 모델(VGG-16)은 속도 7을, 낮은 정확률이 떨어지는 모델 (ZF)은 속도 18을 기록. 
+- VGG-16 version 은 ZF보다 약 10mAP 높은 정확도를 보이지만, YOLO 모델보다 6배 느림.
+- ZF (Zeiler-Fergus) 은 YOLO보다 2.5배나 더 느리지만 (VGG-16보다 빠름) 정확도에서 적합하지 않음
+
+# 4-2 VOC 2007 Error Analysis
