@@ -200,13 +200,44 @@ YOLO와 Fast R-CNN, 두 모델 간 오류를 살펴야 함(Fast R-CNN 은 가장
 2. 위 그림은, 20개의 카테고리에 대하여 각 error type(background, Localization etc) 들을 종합하여 평균을 낸 도표임. (파스칼 데이터셋에 대한 간략 설명 필수)
 3. YOLO 와 Fast R-CNN 의 비교
 - YOLO :
-
-| Breakdown in Localization  | Struggles to localize correctly 
-오류율 높음 | 나머지 에러 합친 값보다 Localization에서 더 큰 breakdown |
-| --- | --- | --- |
-| Breakdown in Background | 오류율 낮음 |  |
-|  |  |  |
-- Fast R-CNN
+- Breakdown in Localization: Struggles to localize correctly 오류율 높음,나머지 에러 합친 값보다 Localization에서 더 큰 breakdown
+- Breakdown in Background: 오류율 낮음
+  
+- Fast R-CNN:
 - Breakdown in Localization: YOLO 보다 낮은 오류율
 - Breakdown in Background: 오류율 높음, 13.6% 비율로 error 를 나타내며, 특정 개체가 아니라 배경(background)를 감지함. [거짓 양성; 잘 탐지하지만, 거짓된 정보, 특정 개체가 아닌 background라는 의미]  YOLO보다 배경을 3배는 더 감지 한다.
 
+
+# 4-3 Combining Fast R-CNN and YOLO
+! YOLO 는 background error가 적다면, R-CNN 과 YOLO 결합은? 
+
+—> YOLO는 background error 가 적으므로, YOLO를 사용하여 R-CNN의 background error, 즉 탐지 자체를 제거할 수 있음 —→ 성능 가속화 (able to get a significant boost 
+
+! 방법
+
+—> R-CNN 이 예측하는 모든 bounding box에 관하여 YOLO 역시 비슷한 bounding box를 예측하는지의 여부를 본다. 그러하다면, YOLO가 예측한 bounding box의 확률 + R-CNN과 YOLO가 예측한 bounding box의 겹치는 부분 (overlap) 으로 예측한다.
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/e2c23048-22c6-464a-85f9-2d4392f5d1e0)
+
+1. [PASCAL VOC 2007 “test set”] Fast R-CNN은 mAP 71.8%. (단독 정확도/combined 정확도/정확도의 변화량)
+2. **[Fast R-CNN + YOLO]** YOLO와 combine 했을 경우,  mAP 가 3.2% 로 증가하여 75%의 정확도 기록
+3. **[Fast R-CNN + other versions of Fast R-CNN]**  YOLO가 아닌 Fast R-CNN의 다른 버전을 combine 했을 경우, “미미하게” 증가한 수치를 보임 (0.3, 0.6) —> Just small increases, small benefit
+
+---
+
+---
+
+- ***주의할 점*** :  [Fast R-CNN + YOLO] 의 성능이 boost up 되는 현상은, 단순히 YOLO 모델과의 “결합” 때문이 아니다.
+
+⇒ ** YOLO 모델은 테스트 집합에서 다양한 오류를 생성하기 때문
+
+
+# 5. Real-Time Detection in the Wild
+- YOLO; 빠르고 정확한 Object Detection (객체 탐지) 수행.
+- 실제 웹캠과 YOLO 모델을 연계하여 실시간으로 객체 탐지 수행함을 증명할 수 있음.
+
+             ——> 실시간 : 카메라를 통하여 사물을 잡아내고, 감지하는 시간을 포함.
+
+- 웹캠과 연결될 경우 : tracking system 과 같은 기능을 한다. (카메라를 이동하면서, 탐지할 객체가 달라지기 때문)
+![image](https://github.com/daheeleestudy/DALC_yolov1_ppt/assets/139957707/5ef23c75-b5a3-470a-aa19-71a5143775ad)
+
+- 임의로 작품이나, 사진에 YOLO를 적용할 경우, 매우 높은 정확률로 객체 탐지를 수행한다.
